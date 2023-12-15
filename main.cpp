@@ -6,36 +6,38 @@ int main() {
     vector<string> rawInput = readFile(filePath);
 
     // Part 1
-    int previousDepth = std::stoi(rawInput[0]);
-    int timesIncreased = 0;
-    for (const auto& line: rawInput) {
-        int currentDepth = std::stoi(line);
-        if (currentDepth > previousDepth) {
-            timesIncreased++;
-        }
-        previousDepth = currentDepth;
-    }
+    long position = 0;
+    long depth = 0;
+    for (const auto &line : rawInput) {
+        vector<string> splitLine = splitLineToString(line, ' ');
 
-    cout << "Part 1: " << timesIncreased << endl;
+        if (splitLine[0] == "forward") {
+            position += std::stoi(splitLine[1]);
+        } else if (splitLine[0] == "down") {
+            depth += std::stoi(splitLine[1]);
+        } else {
+            depth -= std::stoi(splitLine[1]);
+        }
+    }
+    cout << "Part 1: " << (depth * position) << endl;
 
     // Part 2
-    timesIncreased = 0;
-    int currentTotal = 0;
-    int nextTotal = 0;
-    for (int i=0; i<rawInput.size()-3; i++) {
-        for (int j=i; j<i+3; j++) {
-            currentTotal += std::stoi(rawInput[j]);
-            nextTotal += std::stoi(rawInput[j+1]);
-        }
+    position = 0;
+    depth = 0;
+    long aim = 0;
+    for (const auto &line : rawInput) {
+        vector<string> splitLine = splitLineToString(line, ' ');
 
-        if (nextTotal > currentTotal) {
-            timesIncreased++;
+        if (splitLine[0] == "forward") {
+            int lineValue = std::stoi(splitLine[1]);
+            position += lineValue;
+            depth += aim * lineValue;
+        } else if (splitLine[0] == "down") {
+            aim += std::stoi(splitLine[1]);
+        } else {
+            aim -= std::stoi(splitLine[1]);
         }
-
-        currentTotal = 0;
-        nextTotal = 0;
     }
-
-    cout << "Part 2: " << timesIncreased;
+    cout << "Part 2: " << (depth * position) << endl;
     return 0;
 }
